@@ -49,7 +49,7 @@ public:
     bool addFile(const char * file_path, int join_index, long long int start_range_index, long long int end_range_index = -1,
                  bool zero_based_range = false, bool has_header = false, char delimiter = ',');
 
-private:
+//private:
     /*************************************************************************************
      *  Private Functions to src the Mapper
      *************************************************************************************/

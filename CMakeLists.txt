@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.18)
 project(biomapper2)
 
 # Set the C++ Standard to C++20
@@ -35,6 +35,8 @@ function(DisplayPackage pkg)
     message("[${Yellow}${pkg}${ColourReset}]")
 endfunction()
 
+# Add in the benchmark library
+find_package(benchmark REQUIRED)
 
 # Set subdirectory cmake options
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -50,15 +52,18 @@ endif(CMAKE_BUILD_TYPE MATCHES Debug)
 
 file(GLOB SOURCE_FILES "src/*.c" "src/*.h" "src/*.cpp" "src/*.hpp")
 
+
+add_executable(BioMapperTest main.cpp ${SOURCE_FILES})
+
 # Add in subdirectories that files are included from to the project
 target_include_directories(BioMapperTest PRIVATE src)
 target_include_directories(BioMapperTest PRIVATE ${CMAKE_BINARY_DIR})
 
 #add_library(biomapper2 SHARED src/BioMapper.cpp)
 
-add_executable(BioMapperTest src/main.cpp ${SOURCE_FILES})
 
-target_link_libraries(BioMapperTest PRIVATE biomapper2)
+#target_link_libraries(BioMapperTest PRIVATE biomapper2)
+target_link_libraries(BioMapperTest benchmark::benchmark)
 
 
 # Set G++ build info for this project (depending on debug vs release)
@@ -67,3 +72,5 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 else()
     target_compile_options(BioMapperTest PRIVATE -O3 -pthread -Wno-deprecated-declarations)
 endif(CMAKE_BUILD_TYPE MATCHES Debug)
+
+file(COPY test DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

@@ -52,14 +52,22 @@ bool BioMapper::map() {
         return false;
     }
 
-
+	/*
+	 * Read in all of the reference IDs
+	 */
+	if (!_determineReferences()) {
+		std::cerr << "Failure in parsing one or more files' reference IDs.  \n";
+		return false;
+	}
 
     /*
      * CREATE THE THREAD POOL
      * This will use the defined number of threads based
      * on the hardware or user specified.
      */
-//    thread_pool pool(threadsToUse_);
+    thread_pool pool(threadsToUse_);
+
+
 
     return true;
 }
@@ -170,10 +178,7 @@ bool BioMapper::_determineReferences() {
 
             while ( std::getline(_rowElements, _element, file.delimiter()) ) {
                 if ( i == file.join_index() ) {
-                    // TODO: This is re-setting over and over; but not sure if there is
-                    //      a performance penalty tbh.
-                    _refIDs[_element] = true;
-                    // If already updated referenceIDs for this _element, ignore and move to next row
+					_refIDs[_element] = true;
                     // Break out of loop and move to next row
                     break;
                 }

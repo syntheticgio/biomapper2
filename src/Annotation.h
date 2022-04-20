@@ -12,6 +12,7 @@
 
 #include <string>
 #include <utility>
+#include <variant>
 
 /**
  * Typedef for a variant container that allows all expected annotation types.
@@ -123,7 +124,8 @@ public:
             ++location_;
         }
 
-        circularBuffer_ = std::move(annot);
+		// TODO: This will need to be verified that this actually works; untested
+        circularBuffer_ = &annot;
 
     }
 
